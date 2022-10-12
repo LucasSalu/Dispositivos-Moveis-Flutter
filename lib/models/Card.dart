@@ -36,7 +36,7 @@ class WidgetsStatefulState extends State<StatefulWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color,
-      body: SafeArea(
+      body: SingleChildScrollView(child: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -74,7 +74,7 @@ class WidgetsStatefulState extends State<StatefulWidget> {
                   Card(
                     color: Colors.white,
                     margin:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
                     child: ListTile(
                       title: Text(
                         '+55 19 99352-0172',
@@ -93,7 +93,7 @@ class WidgetsStatefulState extends State<StatefulWidget> {
                   Card(
                     color: Colors.white,
                     margin:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
                     child: ListTile(
                       title: Text(
                         description,
@@ -113,7 +113,7 @@ class WidgetsStatefulState extends State<StatefulWidget> {
             ],
           ),
         ),
-      ),
+      ),)
     );
   }
 }
