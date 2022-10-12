@@ -1,5 +1,7 @@
 import 'package:atividade_2/models/Card.dart';
+import 'package:atividade_2/models/Chart.dart';
 import 'package:atividade_2/models/Forms.dart';
+import 'package:atividade_2/models/StockList.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -25,9 +27,9 @@ class MyStatelessWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Tab> myTabs = <Tab>[
-      Tab(icon: Icon(Icons.emoji_people_sharp)),
-      Tab(icon: Icon(Icons.emoji_people_sharp)),
-      Tab(icon: Icon(Icons.emoji_people_sharp)),
+      Tab(icon: Icon(Icons.login)),
+      Tab(icon: Icon(Icons.list_alt_rounded)),
+      Tab(icon: Icon(Icons.graphic_eq)),
     ];
     return DefaultTabController(
       initialIndex: 2,
@@ -43,8 +45,8 @@ class MyStatelessWidget extends StatelessWidget {
         body: TabBarView(
           children: <Widget>[
             MyCustomForm(),
-            WidgetsStateful("Renan Douglas- 243782","Software Developer", "Lucas é um estudante de Análise e Desenvolvimento de Sistemas que atualmente está trabalhando na Letrus. Adora jogar Magic, e não vive sem seu Pc Gamer","images/Renan.jpeg",Colors.green, Colors.green.shade100),
-            WidgetsStateful("Lucas Samuel - 240147", "Software Developer",'Lucas é um estudante de Análise e Desenvolvimento de Sistemas que atualmente está trabalhando na Padtec . Tem muita familiaridade com tecnologias como JavaScript',"images/Lucas.jpeg",Colors.blue, Colors.blue.shade100),
+            StockList(),
+            Chart()
           ],
         ),
       ),

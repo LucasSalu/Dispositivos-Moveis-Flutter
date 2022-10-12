@@ -48,7 +48,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ScaffoldMessenger
                     .of(context)
                     .showSnackBar(
-                    SnackBar(content: Text(completeForm.doSomething())));
+                    SnackBar(content: Text(myController.text)));
                 }
                 },
             child: const Text('Submit'),
