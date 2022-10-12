@@ -25,26 +25,38 @@ class MyStatelessWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Tab> myTabs = <Tab>[
-      Tab(icon: Icon(Icons.emoji_people_sharp)),
-      Tab(icon: Icon(Icons.emoji_people_sharp)),
-      Tab(icon: Icon(Icons.emoji_people_sharp)),
+      const Tab(icon: Icon(Icons.emoji_people_sharp)),
+      const Tab(icon: Icon(Icons.emoji_people_sharp)),
+      const Tab(icon: Icon(Icons.emoji_people_sharp)),
     ];
     return DefaultTabController(
       initialIndex: 2,
       length: myTabs.length,
       child: Scaffold(
         appBar: AppBar(
-          title: Center(child: const Text('Invest')),
-          bottom:TabBar(
+          title: const Center(child: Text('Invest')),
+          bottom: TabBar(
             tabs: myTabs,
           ),
           backgroundColor: Colors.black,
         ),
         body: TabBarView(
           children: <Widget>[
-            MyCustomForm(),
-            WidgetsStateful("Renan Douglas- 243782","Software Developer", "Lucas é um estudante de Análise e Desenvolvimento de Sistemas que atualmente está trabalhando na Letrus. Adora jogar Magic, e não vive sem seu Pc Gamer","images/Renan.jpeg",Colors.green, Colors.green.shade100),
-            WidgetsStateful("Lucas Samuel - 240147", "Software Developer",'Lucas é um estudante de Análise e Desenvolvimento de Sistemas que atualmente está trabalhando na Padtec . Tem muita familiaridade com tecnologias como JavaScript',"images/Lucas.jpeg",Colors.blue, Colors.blue.shade100),
+            SignupPage(),
+            WidgetsStateful(
+                "Renan Douglas- 243782",
+                "Software Developer",
+                "Lucas é um estudante de Análise e Desenvolvimento de Sistemas que atualmente está trabalhando na Letrus. Adora jogar Magic, e não vive sem seu Pc Gamer",
+                "images/Renan.jpeg",
+                Colors.green,
+                Colors.green.shade100),
+            WidgetsStateful(
+                "Lucas Samuel - 240147",
+                "Software Developer",
+                'Lucas é um estudante de Análise e Desenvolvimento de Sistemas que atualmente está trabalhando na Padtec . Tem muita familiaridade com tecnologias como JavaScript',
+                "images/Lucas.jpeg",
+                Colors.blue,
+                Colors.blue.shade100),
           ],
         ),
       ),
