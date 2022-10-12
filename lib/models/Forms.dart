@@ -138,10 +138,115 @@ class SignupPageState extends State<SignupPage> {
                             height: 60,
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text(completeForm.doSomething())));
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      child: Wrap(
+                                        children: [
+                                          const ListTile(
+                                            title: Text(
+                                              "Confira os dados que você inseriu:",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black87),
+                                            ),
+                                          ),
+                                          ListTile(
+                                            leading: const Icon(Icons.email),
+                                            title: const Text("Email:"),
+                                            subtitle: Text(completeForm
+                                                .textFields["email"]
+                                                .toString()),
+                                          ),
+                                          ListTile(
+                                            leading: const Icon(Icons.person),
+                                            title: const Text("Nome Completo:"),
+                                            subtitle: Text(completeForm
+                                                .textFields["name"]
+                                                .toString()),
+                                          ),
+                                          ListTile(
+                                            leading: const Icon(Icons.money),
+                                            title: const Text(
+                                                "Renda que você planeja investir:"),
+                                            subtitle: Text(
+                                                "${completeForm.slideValue.ceil()}% da minha renda"),
+                                          ),
+                                          Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                MaterialButton(
+                                                  minWidth: 20,
+                                                  height: 40,
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  color: Colors.redAccent,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20)),
+                                                  child: const Text(
+                                                    "Cancelar",
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ),
+                                                MaterialButton(
+                                                  minWidth: 20,
+                                                  height: 40,
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                            const SnackBar(
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .greenAccent,
+                                                                content: Text(
+                                                                    "Cadastrado com sucesso!",
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontSize:
+                                                                          16,
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ))));
+                                                    DefaultTabController.of(
+                                                            this.context)!
+                                                        .animateTo(1);
+                                                  },
+                                                  color: Colors.greenAccent,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20)),
+                                                  child: const Text(
+                                                    "Confirmar",
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ]),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
                               }
                             },
                             color: Colors.yellowAccent,
@@ -191,7 +296,7 @@ class SignupPageState extends State<SignupPage> {
           obscureText: obsureText,
           onChanged: (value) {
             setState(() {
-              completeForm.textfields[datafield] = value;
+              completeForm.textFields[datafield] = value;
             });
           },
           decoration: InputDecoration(
@@ -217,7 +322,7 @@ class SignupPageState extends State<SignupPage> {
 }
 
 class CompleteForm {
-  Map textfields = {
+  Map textFields = {
     "email": "",
     "name": "",
     "password": "",
@@ -228,7 +333,7 @@ class CompleteForm {
 
   doSomething() {
     return "Checkbox: $checkboxValue\n"
-        "Slider: $slideValue\n"
-        "Text: $textfields\n";
+        "Slider: ${slideValue.ceil()}\n"
+        "Text: $textFields\n";
   }
 }
