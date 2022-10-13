@@ -363,10 +363,4 @@ class CompleteForm {
   bool checkboxValue = false;
   bool checkBoxError = false;
   double slideValue = .5;
-
-  doSomething() {
-    return "Checkbox: $checkboxValue\n"
-        "Slider: ${slideValue.ceil()}\n"
-        "Text: $textFields\n";
-  }
 }
