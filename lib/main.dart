@@ -31,7 +31,6 @@ class MyStatelessWidget extends StatelessWidget {
       const Tab(icon: Icon(Icons.graphic_eq)),
     ];
     return DefaultTabController(
-      initialIndex: 2,
       length: myTabs.length,
       child: Scaffold(
         appBar: AppBar(
