@@ -36,18 +36,14 @@ class MyStatelessWidget extends StatelessWidget {
       length: myTabs.length,
       child: Scaffold(
         appBar: AppBar(
-          title: Center(child: const Text('Invest')),
-          bottom:TabBar(
+          title: const Center(child: Text('Invest')),
+          bottom: TabBar(
             tabs: myTabs,
           ),
           backgroundColor: Colors.black,
         ),
         body: TabBarView(
-          children: <Widget>[
-            MyCustomForm(),
-            StockList(),
-            Chart()
-          ],
+          children: <Widget>[SignupPage(), StockList(), Chart()],
         ),
       ),
     );
