@@ -108,12 +108,33 @@ class SignupPageState extends State<SignupPage> {
                               ),
                             ),
                             CheckboxListTile(
-                              title: const Text("Aceito os termos de uso"),
+                              side: BorderSide(
+                                  color: completeForm.checkBoxError
+                                      ? Colors.red
+                                      : Colors.black),
+                              title: Text(
+                                "Aceito os termos de uso",
+                                style: TextStyle(
+                                    color: completeForm.checkBoxError
+                                        ? Colors.red
+                                        : Colors.black),
+                              ),
+                              subtitle: completeForm.checkBoxError
+                                  ? const Text(
+                                      "Você precisa aceitar os termos de uso",
+                                      style: TextStyle(color: Colors.red),
+                                    )
+                                  : null,
                               activeColor: Colors.yellow[700],
                               value: completeForm.checkboxValue,
                               onChanged: (newValue) {
                                 setState(() {
                                   completeForm.checkboxValue = newValue!;
+                                  if (completeForm.checkBoxError == true) {
+                                    setState(() {
+                                      completeForm.checkBoxError = false;
+                                    });
+                                  }
                                 });
                               },
                               controlAffinity: ListTileControlAffinity.leading,
@@ -137,7 +158,12 @@ class SignupPageState extends State<SignupPage> {
                             minWidth: 200,
                             height: 60,
                             onPressed: () {
-                              if (_formKey.currentState!.validate()) {
+                              if (completeForm.checkboxValue == false) {
+                                setState(() {
+                                  completeForm.checkBoxError = true;
+                                });
+                                return;
+                              } else if (_formKey.currentState!.validate()) {
                                 showModalBottomSheet(
                                   context: context,
                                   builder: (context) {
@@ -292,8 +318,14 @@ class SignupPageState extends State<SignupPage> {
         const SizedBox(
           height: 5,
         ),
-        TextField(
+        TextFormField(
           obscureText: obsureText,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Por favor preencha este campo corretamente';
+            }
+            return null;
+          },
           onChanged: (value) {
             setState(() {
               completeForm.textFields[datafield] = value;
@@ -329,6 +361,7 @@ class CompleteForm {
     "password-confirmation": "",
   };
   bool checkboxValue = false;
+  bool checkBoxError = false;
   double slideValue = .5;
 
   doSomething() {
