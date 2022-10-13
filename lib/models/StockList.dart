@@ -25,38 +25,34 @@ class StockListState extends State<StockList> {
             leading: CircleAvatar(
                 backgroundColor: Colors.grey[300],
                 foregroundColor: Colors.black,
-                backgroundImage: NetworkImage('images/Grafico.png'),
+                backgroundImage: const NetworkImage('images/Grafico.png'),
                 radius: 25.0),
             title: Text(lista[index].name),
             subtitle: Text(lista[index].price.toString()),
             tileColor: Colors.grey[300],
             trailing: IconButton(
               icon: PopupMenuButton(
-                icon: Icon(Icons.more_vert),
+                icon: const Icon(Icons.more_vert),
                 itemBuilder: (BuildContext context) {
                   return [
                     PopupMenuItem(
-                      child: Text("Editar"),
+                      child: const Text("Comparar"),
                       value: 1,
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Você clicou em editar")));
+                        DefaultTabController.of(this.context)!.animateTo(2);
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                                "Essa funcionalidade irá comparar duas criptomoedas no futuro")));
                       },
                     ),
                     PopupMenuItem(
-                      child: Text("Mostrar Grafico"),
+                      child: const Text("Mostrar Grafico"),
                       value: 2,
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Você clicou em Mostrar Grafico")));
-                      },
-                    ),
-                    PopupMenuItem(
-                      child: Text("Excluir"),
-                      value: 3,
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Você clicou em Excluir")));
+                        DefaultTabController.of(this.context)!.animateTo(2);
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                                "Essa funcionalidade irá mostrar o gráfico somente da criptomoeda selecionada")));
                       },
                     ),
                   ];

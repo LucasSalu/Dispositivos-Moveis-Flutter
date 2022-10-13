@@ -1,15 +1,14 @@
-import 'package:atividade_2/models/Card.dart';
 import 'package:atividade_2/models/Chart.dart';
 import 'package:atividade_2/models/Forms.dart';
 import 'package:atividade_2/models/StockList.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
-  static const String _title = 'Flutter Code Sample';
+  static const String _title = 'Investment App';
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +26,9 @@ class MyStatelessWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Tab> myTabs = <Tab>[
-      Tab(icon: Icon(Icons.login)),
-      Tab(icon: Icon(Icons.list_alt_rounded)),
-      Tab(icon: Icon(Icons.graphic_eq)),
+      const Tab(icon: Icon(Icons.login)),
+      const Tab(icon: Icon(Icons.list_alt_rounded)),
+      const Tab(icon: Icon(Icons.graphic_eq)),
     ];
     return DefaultTabController(
       initialIndex: 2,
@@ -42,7 +41,7 @@ class MyStatelessWidget extends StatelessWidget {
           ),
           backgroundColor: Colors.black,
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: <Widget>[SignupPage(), StockList(), Chart()],
         ),
       ),
