@@ -14,6 +14,8 @@ class StockListState extends State<StockList> {
   final List<String> entries = <String>['A', 'B', 'C'];
   final List<int> colorCodes = <int>[600, 500, 100];
   List lista = ServiceStock.getAll();
+  ServiceStock teste = ServiceStock();
+
 
   @override
   @override
@@ -58,7 +60,9 @@ class StockListState extends State<StockList> {
                   ];
                 },
               ),
-              onPressed: () {},
+              onPressed: () {
+                teste.getCripto();
+              },
             ),
           );
         });

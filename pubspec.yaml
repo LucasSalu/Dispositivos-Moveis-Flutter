@@ -29,7 +29,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  rxdart:
+  dio:
   bezier_chart: "^1.0.16"
 
 
