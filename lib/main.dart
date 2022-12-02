@@ -26,7 +26,10 @@ class MyStatelessWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Tab> myTabs = <Tab>[
-      const Tab(icon: Icon(Icons.login)),
+      const Tab(
+          icon: Icon(Icons.login
+              //TO-DO: Change icons after login and profile implementation
+              )),
       const Tab(icon: Icon(Icons.list_alt_rounded)),
       const Tab(icon: Icon(Icons.graphic_eq)),
     ];
@@ -41,7 +44,7 @@ class MyStatelessWidget extends StatelessWidget {
           backgroundColor: Colors.black,
         ),
         body: const TabBarView(
-          children: <Widget>[SignupPage(), StockList(), Chart()],
+          children: <Widget>[Forms(), StockList(), Chart()],
         ),
       ),
     );
