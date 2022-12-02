@@ -1,4 +1,8 @@
+import 'package:atividade_2/bloc/view/view_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../bloc/view/view_events.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,6 +20,7 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    ViewBloc viewBloc = BlocProvider.of<ViewBloc>(context);
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SingleChildScrollView(
@@ -89,7 +94,7 @@ class LoginPageState extends State<LoginPage> {
                                 minWidth: 20,
                                 height: 40,
                                 onPressed: () {
-                                  //TODO: Implement page change logic
+                                  viewBloc.add(ChangeView(view: 'register'));
                                 },
                                 color: Colors.yellowAccent,
                                 shape: RoundedRectangleBorder(

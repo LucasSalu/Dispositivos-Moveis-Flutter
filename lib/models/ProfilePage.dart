@@ -1,4 +1,7 @@
+import 'package:atividade_2/bloc/auth/auth_bloc.dart';
+import 'package:atividade_2/bloc/auth/auth_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -16,6 +19,8 @@ class ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
+
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SingleChildScrollView(
@@ -91,7 +96,10 @@ class ProfilePageState extends State<ProfilePage> {
                         child: MaterialButton(
                           minWidth: 200,
                           height: 60,
-                          onPressed: () {},
+                          onPressed: () {
+                            authBloc
+                                .add(LogoutUser(token: authBloc.state.token));
+                          },
                           color: Colors.yellowAccent,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),

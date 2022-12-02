@@ -1,7 +1,11 @@
-import 'package:atividade_2/models/Chart.dart';
-import 'package:atividade_2/models/Forms.dart';
-import 'package:atividade_2/models/StockList.dart';
+import 'package:atividade_2/models/Wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'bloc/auth/auth_bloc.dart';
+import 'bloc/auth/auth_state.dart';
+import 'bloc/view/view_bloc.dart';
+import 'bloc/view/view_state.dart';
 
 void main() => runApp(const MyApp());
 
@@ -25,28 +29,10 @@ class MyStatelessWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Tab> myTabs = <Tab>[
-      const Tab(
-          icon: Icon(Icons.login
-              //TO-DO: Change icons after login and profile implementation
-              )),
-      const Tab(icon: Icon(Icons.list_alt_rounded)),
-      const Tab(icon: Icon(Icons.graphic_eq)),
-    ];
-    return DefaultTabController(
-      length: myTabs.length,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Center(child: Text('Invest')),
-          bottom: TabBar(
-            tabs: myTabs,
-          ),
-          backgroundColor: Colors.black,
-        ),
-        body: const TabBarView(
-          children: <Widget>[Forms(), StockList(), Chart()],
-        ),
-      ),
-    );
+    return MultiBlocProvider(providers: [
+      BlocProvider(create: (context) => AuthBloc(AuthState())),
+      BlocProvider(create: (context) => ViewBloc(ViewState())),
+      //BlocProvider(create: (context) => StockBloc()),
+    ], child: const Wrapper());
   }
 }
