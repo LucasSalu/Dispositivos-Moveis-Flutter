@@ -9,10 +9,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthState(token: authenticate(event.token)));
     });
     on<LoginUser>((event, emit) {
-      emit(AuthState(token: event.password));
+      AuthClass authenticationState = loginUser(event.email, event.password);
+      emit(AuthState(
+          token: authenticationState.token,
+          isAuthenticated: authenticationState.isAuthenticated));
     });
     on<RegisterUser>((event, emit) {
-      emit(AuthState(token: 'TOKEN'));
+      AuthClass authenticationState = registerUser(
+          event.email, event.password, event.name, event.hasAcceptedTerms);
+      emit(AuthState(
+          token: authenticationState.token,
+          isAuthenticated: authenticationState.isAuthenticated));
     });
     on<LogoutUser>((event, emit) {
       emit(AuthState(token: clearToken(event.token)));
@@ -37,4 +44,33 @@ String clearToken(String token) {
   } else {
     return token;
   }
+}
+
+String generateToken() {
+  return 'FAILED';
+}
+
+AuthClass loginUser(String email, String password) {
+  if (email == 'email' && password == '1234') {
+    //TODO: Find Token Where Email and Password Match at DB
+    AuthClass authenticationState = AuthClass('TOKEN', true);
+    return authenticationState;
+  } else {
+    return AuthClass('', false);
+  }
+}
+
+AuthClass registerUser(String email, String password, String name, bool terms) {
+  //TODO: Generate token and add user to DB.
+  if (generateToken() == 'TOKEN') {
+    return AuthClass('TOKEN', true);
+  }
+  return AuthClass('', false);
+}
+
+class AuthClass {
+  String token = '';
+  bool isAuthenticated = false;
+
+  AuthClass(this.token, this.isAuthenticated);
 }

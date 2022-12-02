@@ -1,7 +1,9 @@
+import 'package:atividade_2/bloc/auth/auth_event.dart';
 import 'package:atividade_2/bloc/view/view_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../bloc/auth/auth_bloc.dart';
 import '../bloc/view/view_events.dart';
 
 class LoginPage extends StatefulWidget {
@@ -21,6 +23,7 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     ViewBloc viewBloc = BlocProvider.of<ViewBloc>(context);
+    AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SingleChildScrollView(
@@ -77,7 +80,23 @@ class LoginPageState extends State<LoginPage> {
                                 minWidth: 20,
                                 height: 40,
                                 onPressed: () {
-                                  //TODO: Implement login logic
+                                  setState(() {
+                                    completeForm.hasAuthError = false;
+                                  });
+                                  authBloc.add(
+                                    LoginUser(
+                                        email: completeForm.textFields["email"],
+                                        password: completeForm
+                                            .textFields["password"]),
+                                  );
+                                  if (!authBloc.state.isAuthenticated) {
+                                    setState(() {
+                                      completeForm.hasAuthError = true;
+                                    });
+                                  }
+                                  if (_formKey.currentState!.validate()) {
+                                    return;
+                                  }
                                 },
                                 color: Colors.yellowAccent,
                                 shape: RoundedRectangleBorder(
@@ -144,6 +163,8 @@ class LoginPageState extends State<LoginPage> {
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Por favor preencha este campo corretamente';
+            } else if (completeForm.hasAuthError) {
+              return 'Email ou senha incorretos';
             }
             return null;
           },
@@ -179,4 +200,14 @@ class CompleteForm {
     "email": "",
     "password": "",
   };
+  bool hasAuthError = false;
+}
+
+bool verifyError(AuthBloc authBloc) {
+  //await Future.delayed(const Duration(milliseconds: 100));
+  if (authBloc.state.token.isEmpty) {
+    return true;
+  } else {
+    return false;
+  }
 }

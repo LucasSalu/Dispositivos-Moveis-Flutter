@@ -43,7 +43,7 @@ class WrapperState extends State<Wrapper> {
             length: myTabs.length,
             child: Conditional.single(
               context: context,
-              conditionBuilder: (BuildContext context) {
+              conditionBuilder: (context) {
                 if (state.token.isNotEmpty) {
                   return state.token.isNotEmpty;
                 } else {

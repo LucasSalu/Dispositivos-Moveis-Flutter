@@ -1,4 +1,10 @@
+import 'package:atividade_2/bloc/auth/auth_bloc.dart';
+import 'package:atividade_2/bloc/auth/auth_event.dart';
+import 'package:atividade_2/bloc/auth/auth_state.dart';
+import 'package:atividade_2/bloc/view/view_bloc.dart';
+import 'package:atividade_2/bloc/view/view_events.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -16,6 +22,8 @@ class SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
+    AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
+    ViewBloc viewBloc = BlocProvider.of<ViewBloc>(context);
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SingleChildScrollView(
@@ -229,29 +237,75 @@ class SignupPageState extends State<SignupPage> {
                                                   minWidth: 20,
                                                   height: 40,
                                                   onPressed: () {
+                                                    setState(() {
+                                                      completeForm
+                                                          .hasAuthError = false;
+                                                    });
+                                                    authBloc.add(RegisterUser(
+                                                      email: completeForm
+                                                          .textFields["email"]
+                                                          .toString(),
+                                                      password: completeForm
+                                                          .textFields[
+                                                              "password"]
+                                                          .toString(),
+                                                      name: completeForm
+                                                          .textFields["name"]
+                                                          .toString(),
+                                                      hasAcceptedTerms:
+                                                          completeForm
+                                                              .checkboxValue,
+                                                    ));
                                                     Navigator.pop(context);
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                            const SnackBar(
-                                                                backgroundColor:
-                                                                    Colors
-                                                                        .greenAccent,
-                                                                content: Text(
-                                                                    "Cadastrado com sucesso!",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      fontSize:
-                                                                          16,
-                                                                      color: Colors
-                                                                          .white,
-                                                                    ))));
-                                                    DefaultTabController.of(
-                                                            this.context)!
-                                                        .animateTo(1);
+                                                    if (!authBloc.state
+                                                        .isAuthenticated) {
+                                                      setState(() {
+                                                        completeForm
+                                                                .hasAuthError =
+                                                            true;
+                                                      });
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        const SnackBar(
+                                                          backgroundColor:
+                                                              Colors.redAccent,
+                                                          content: Text(
+                                                            "Ocorreu um erro ao cadastrar o usuário!!",
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              fontSize: 16,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    } else if (authBloc.state
+                                                        .isAuthenticated) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        const SnackBar(
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .greenAccent,
+                                                          content: Text(
+                                                            "Cadastrado com sucesso!",
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              fontSize: 16,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }
                                                   },
                                                   color: Colors.greenAccent,
                                                   shape: RoundedRectangleBorder(
@@ -362,5 +416,6 @@ class CompleteForm {
   };
   bool checkboxValue = false;
   bool checkBoxError = false;
+  bool hasAuthError = false;
   double slideValue = .5;
 }
