@@ -1,5 +1,8 @@
-import 'package:atividade_2/ServiceStock.dart';
+import 'package:atividade_2/services/ServiceStock.dart';
+import 'package:atividade_2/bloc/stock/stock_bloc.dart';
+import 'package:atividade_2/bloc/stock/stock_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StockList extends StatefulWidget {
   const StockList({Key? key}) : super(key: key);
@@ -14,12 +17,13 @@ class StockListState extends State<StockList> {
   final List<String> entries = <String>['A', 'B', 'C'];
   final List<int> colorCodes = <int>[600, 500, 100];
   List lista = ServiceStock.getAll();
-  ServiceStock teste = ServiceStock();
+  ServiceStock serviceStock = ServiceStock();
 
 
   @override
   @override
   Widget build(BuildContext context) {
+    StockBloc stockBloc = BlocProvider.of<StockBloc>(context);
     return ListView.builder(
         itemCount: lista.length,
         itemBuilder: (BuildContext context, int index) {
@@ -41,6 +45,7 @@ class StockListState extends State<StockList> {
                       child: const Text("Comparar"),
                       value: 1,
                       onTap: () {
+                        stockBloc.add(ChangeChart(changeChart: lista[index]));
                         DefaultTabController.of(this.context)!.animateTo(2);
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             content: Text(
@@ -51,6 +56,7 @@ class StockListState extends State<StockList> {
                       child: const Text("Mostrar Grafico"),
                       value: 2,
                       onTap: () {
+                        stockBloc.add(ChangeChart(changeChart: lista[index]));
                         DefaultTabController.of(this.context)!.animateTo(2);
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             content: Text(
@@ -61,7 +67,6 @@ class StockListState extends State<StockList> {
                 },
               ),
               onPressed: () {
-                teste.getCripto();
               },
             ),
           );

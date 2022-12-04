@@ -1,9 +1,11 @@
+import 'package:atividade_2/bloc/stock/stock_state.dart';
 import 'package:atividade_2/models/Wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/auth/auth_bloc.dart';
 import 'bloc/auth/auth_state.dart';
+import 'bloc/stock/stock_bloc.dart';
 import 'bloc/view/view_bloc.dart';
 import 'bloc/view/view_state.dart';
 
@@ -32,7 +34,7 @@ class MyStatelessWidget extends StatelessWidget {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (context) => AuthBloc(AuthState())),
       BlocProvider(create: (context) => ViewBloc(ViewState())),
-      //BlocProvider(create: (context) => StockBloc()),
+      BlocProvider(create: (context) => StockBloc(StockState())),
     ], child: const Wrapper());
   }
 }

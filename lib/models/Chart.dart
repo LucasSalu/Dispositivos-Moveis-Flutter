@@ -1,5 +1,9 @@
+import 'package:atividade_2/bloc/stock/stock_bloc.dart';
+import 'package:atividade_2/services/ServiceStock.dart';
+import 'package:atividade_2/utils/stock.dart';
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Chart extends StatefulWidget {
   const Chart({Key? key}) : super(key: key);
@@ -13,6 +17,8 @@ class Chart extends StatefulWidget {
 class ChartState extends State<Chart> {
   @override
   Widget build(BuildContext context) {
+    StockBloc stockBloc = BlocProvider.of<StockBloc>(context);
+    ServiceStock serviceStock = ServiceStock();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -46,79 +52,62 @@ class ChartState extends State<Chart> {
           color: Colors.red,
           height: MediaQuery.of(context).size.height / 2,
           width: MediaQuery.of(context).size.width,
-          child: BezierChart(
-            bezierChartScale: BezierChartScale.CUSTOM,
-            xAxisCustomValues: const [0, 5, 10, 15, 20, 25, 30, 35],
-            series: const [
-              BezierLine(
-                data: [
-                  DataPoint<double>(value: 10, xAxis: 0),
-                  DataPoint<double>(value: 130, xAxis: 5),
-                  DataPoint<double>(value: 50, xAxis: 10),
-                  DataPoint<double>(value: 150, xAxis: 15),
-                  DataPoint<double>(value: 75, xAxis: 20),
-                  DataPoint<double>(value: 0, xAxis: 25),
-                  DataPoint<double>(value: 5, xAxis: 30),
-                  DataPoint<double>(value: 45, xAxis: 35),
-                ],
-              ),
-              BezierLine(
-                lineColor: Colors.black,
-                data: [
-                  DataPoint<double>(value: 20, xAxis: 0),
-                  DataPoint<double>(value: 140, xAxis: 5),
-                  DataPoint<double>(value: 60, xAxis: 10),
-                  DataPoint<double>(value: 110, xAxis: 15),
-                  DataPoint<double>(value: 55, xAxis: 20),
-                  DataPoint<double>(value: 1, xAxis: 25),
-                  DataPoint<double>(value: 22, xAxis: 30),
-                  DataPoint<double>(value: 33, xAxis: 35),
-                ],
-              ),
-            ],
-            config: BezierChartConfig(
-              verticalIndicatorStrokeWidth: 3.0,
-              verticalIndicatorColor: Colors.black26,
-              showVerticalIndicator: true,
-              backgroundColor: Colors.red,
-              snap: false,
-            ),
-          ),
+          child: sample3(context),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            serviceStock.getCripto();
+            print(stockBloc.state.stock);
+          },
+          child: const Text('Enabled'),
         ),
       ],
     );
   }
 }
 
-Widget sample1(BuildContext context) {
+
+
+Widget sample3(BuildContext context) {
+  final fromDate = DateTime(2019, 05, 22);
+  final toDate = DateTime.now();
+
+  final date1 = DateTime.now().subtract(Duration(days: 1));
+  final date2 = DateTime.now().subtract(Duration(days: 15));
+  ServiceStock serviceStock = ServiceStock();
+  StockBloc stockBloc = BlocProvider.of<StockBloc>(context);
+  Stock? stock = stockBloc.state.stock == null? stockBloc.state.stock :Stock("Bitcoin", DateTime.now(), 200.0, "BTC");
+  List<DataPoint<DateTime>> listPoints = serviceStock.dataPoints(stock!);
+
   return Center(
     child: Container(
       color: Colors.red,
       height: MediaQuery.of(context).size.height / 2,
-      width: MediaQuery.of(context).size.width * 0.9,
+      width: MediaQuery.of(context).size.width,
       child: BezierChart(
-        bezierChartScale: BezierChartScale.CUSTOM,
-        xAxisCustomValues: const [0, 5, 10, 15, 20, 25, 30, 35],
-        series: const [
+        fromDate: fromDate,
+        bezierChartScale: BezierChartScale.WEEKLY,
+        toDate: toDate,
+        selectedDate: toDate,
+        series: [
           BezierLine(
-            data: [
-              DataPoint<double>(value: 10, xAxis: 0),
-              DataPoint<double>(value: 130, xAxis: 5),
-              DataPoint<double>(value: 50, xAxis: 10),
-              DataPoint<double>(value: 150, xAxis: 15),
-              DataPoint<double>(value: 75, xAxis: 20),
-              DataPoint<double>(value: 0, xAxis: 25),
-              DataPoint<double>(value: 5, xAxis: 30),
-              DataPoint<double>(value: 45, xAxis: 35),
-            ],
+            label: "Duty",
+            onMissingValue: (dateTime) {
+              if (dateTime.day.isEven) {
+                return 10.0;
+              }
+              return 5.0;
+            },
+            data: listPoints,
           ),
         ],
         config: BezierChartConfig(
           verticalIndicatorStrokeWidth: 3.0,
           verticalIndicatorColor: Colors.black26,
           showVerticalIndicator: true,
+          verticalIndicatorFixedPosition: false,
           backgroundColor: Colors.red,
-          snap: false,
+          footerHeight: 30.0,
         ),
       ),
     ),
