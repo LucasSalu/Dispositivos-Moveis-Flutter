@@ -2,20 +2,20 @@ import 'package:sqflite/sqflite.dart';
 
 import '../database/db/db.dart';
 
-class CurrentSessionRepository {
+class SessionDataRepository {
   late Database db;
 
   String _currentToken = '';
 
-  CurrentSessionRepository() {
+  SessionDataRepository() {
     _initRepository();
   }
 
   _initRepository() async {
-    await _getCurrentToken();
+    await getCurrentToken();
   }
 
-  _getCurrentToken() async {
+  getCurrentToken() async {
     db = await DB.instance.database;
     List<Map<String, Object?>> result = await db.query('user');
     _currentToken = result.first['token'].toString();
@@ -23,17 +23,26 @@ class CurrentSessionRepository {
 
   String get currentToken => _currentToken;
 
+  Future<String> validateSessionToken(String token) async {
+    db = await DB.instance.database;
+    List<Map<String, Object?>> result = await db.query('user');
+    if (result.first['currentToken'].toString() == token) {
+      return token;
+    } else {
+      return '';
+    }
+  }
+
   Future<void> updateCurrentToken(String token) async {
     db = await DB.instance.database;
     await db.update('_sessionData', {'currentToken': token});
-    await _getCurrentToken();
+    await getCurrentToken();
   }
 
   Future<void> deleteCurrentToken() async {
     db = await DB.instance.database;
-    await _getCurrentToken();
     await db.delete('sessionData',
         where: 'currentToken = ?', whereArgs: [_currentToken]);
-    await _getCurrentToken();
+    await getCurrentToken();
   }
 }

@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'package:atividade_2/repositories/session_data_repository.dart';
+import 'package:atividade_2/repositories/user_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'auth_event.dart';
@@ -28,44 +32,61 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 }
 
 String authenticate(String token) {
-  if (token == 'TOKEN') {
-    //TODO: Get Token from DB
-    return token;
-  } else {
-    //Not Authenticated
-    return '';
-  }
+  UserRepository users = UserRepository();
+  String sessionToken = '';
+  users.validateToken(token).then((value) => sessionToken = value);
+  return sessionToken;
 }
 
 String clearToken(String token) {
-  if (token.isNotEmpty) {
-    //TODO: Clear Token from DB
-    return '';
+  SessionDataRepository sessionDataRepository = SessionDataRepository();
+  if (token.isNotEmpty && sessionDataRepository.currentToken.isNotEmpty) {
+    sessionDataRepository.deleteCurrentToken();
+    return sessionDataRepository.currentToken;
   } else {
-    return token;
+    return '';
   }
 }
 
 String generateToken() {
-  return 'FAILED';
+  const _chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  Random _rnd = Random();
+
+  String getRandomString(int length) => String.fromCharCodes(
+        Iterable.generate(
+          length,
+          (_) => _chars.codeUnitAt(
+            _rnd.nextInt(_chars.length),
+          ),
+        ),
+      );
+
+  return getRandomString(15);
 }
 
 AuthClass loginUser(String email, String password) {
-  if (email == 'email' && password == '1234') {
-    //TODO: Find Token Where Email and Password Match at DB
-    AuthClass authenticationState = AuthClass('TOKEN', true);
-    return authenticationState;
-  } else {
-    return AuthClass('', false);
-  }
+  UserRepository users = UserRepository();
+  String userToken = '';
+  var allUsers;
+  users.getAll().then((value) => allUsers = value);
+  List<String> usersList = users.emails;
+  List<String> tokensList = users.tokens;
+  users.getUserToken(email, password).then((value) => userToken = value);
+
+  print('User token: $userToken');
+  print('User names: $usersList');
+  print('User tokens: $tokensList');
+  print('getAll ${allUsers}');
+
+  return AuthClass(userToken, userToken.isNotEmpty);
 }
 
 AuthClass registerUser(String email, String password, String name, bool terms) {
-  //TODO: Generate token and add user to DB.
-  if (generateToken() == 'TOKEN') {
-    return AuthClass('TOKEN', true);
-  }
-  return AuthClass('', false);
+  UserRepository users = UserRepository();
+  String token = generateToken();
+  users.insertUser(name, email, password, token);
+  return AuthClass(token, true);
 }
 
 class AuthClass {

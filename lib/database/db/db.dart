@@ -18,7 +18,7 @@ class DB {
 
   _initDB() async {
     return await openDatabase(
-      join(await getDatabasesPath(), 'localdatabase.db'),
+      join(await getDatabasesPath(), 'stocks.db'),
       onCreate: _onCreate,
       version: 1,
     );
@@ -29,6 +29,13 @@ class DB {
     await db.execute(_sessionData);
     await db.execute(_stocks);
     await db.execute(_userStockList);
+    await db.insert('user', {
+      'token': '123456789',
+      'name': 'John',
+      'email': 'socorro',
+      'password': '1234'
+    });
+    print('Database created');
   }
 
   final String _user = '''
@@ -43,7 +50,8 @@ class DB {
 
   final String _sessionData = '''
     CREATE TABLE sessionData (
-      currentToken TEXT PRIMARY KEY,
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      currentToken TEXT
     )
   ''';
 
@@ -52,18 +60,18 @@ class DB {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
       price DOLLAR,
-      imagePath TEXT,
+      imagePath TEXT
     )
   ''';
 
   final String _userStockList = '''
     CREATE TABLE stocksList (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      userId INTEGER FOREIGN KEY,
+      userId INTEGER,
       longName TEXT,
       shortName TEXT,
       price DOLLAR,
-      quantity INTEGER,
+      quantity INTEGER
     )
   ''';
 }

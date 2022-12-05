@@ -23,44 +23,39 @@ class UserRepository {
     await _getIds();
   }
 
-  getAll() async {
-    db = await DB.instance.database;
-    List<Map<String, dynamic>> result = await db.query('user');
-    return result;
-  }
-
   _getIds() async {
     db = await DB.instance.database;
-    List<Map<String, dynamic>> result = await db.query('user', columns: ['id']);
-    _ids = result.map((e) => e['id'].toString()).toList();
+    List<String> result =
+        await db.query('user', columns: ['id']) as List<String>;
+    _ids = result;
   }
 
   _getNames() async {
     db = await DB.instance.database;
-    List<Map<String, dynamic>> result =
-        await db.query('user', columns: ['name']);
-    _names = result.map((e) => e['name'].toString()).toList();
+    List<String> result =
+        await db.query('user', columns: ['name']) as List<String>;
+    _names = result;
   }
 
   _getEmails() async {
     db = await DB.instance.database;
-    List<Map<String, dynamic>> result =
-        await db.query('user', columns: ['email']);
-    _emails = result.map((e) => e['email'].toString()).toList();
+    List<String> result =
+        await db.query('user', columns: ['email']) as List<String>;
+    _emails = result;
   }
 
   _getPasswords() async {
     db = await DB.instance.database;
-    List<Map<String, dynamic>> result =
-        await db.query('user', columns: ['password']);
-    _passwords = result.map((e) => e['password'].toString()).toList();
+    List<String> result =
+        await db.query('user', columns: ['password']) as List<String>;
+    _passwords = result;
   }
 
   _getTokens() async {
     db = await DB.instance.database;
-    List<Map<String, dynamic>> result =
-        await db.query('user', columns: ['token']);
-    _tokens = result.map((e) => e['token'].toString()).toList();
+    List<String> result =
+        await db.query('user', columns: ['token']) as List<String>;
+    _tokens = result;
   }
 
   List<String> get names => _names;
@@ -70,12 +65,8 @@ class UserRepository {
   Future<void> insertUser(
       String name, String email, String password, String token) async {
     db = await DB.instance.database;
-    await db.insert('user', {
-      'name': name,
-      'email': email,
-      'password': password,
-      'token': token
-    }).whenComplete(() => print('User inserted'));
+    await db.insert('user',
+        {'name': name, 'email': email, 'password': password, 'token': token});
     await _getNames();
     await _getEmails();
     await _getPasswords();
