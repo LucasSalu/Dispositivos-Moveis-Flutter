@@ -83,6 +83,7 @@ class ProfilePageState extends State<ProfilePage> {
                                     title: const Text("Nome Completo:"),
                                     subtitle: Text(userLoginBloc.state.name,
                                   ),
+                                  ),
                                 ],
                               ),
                             ),

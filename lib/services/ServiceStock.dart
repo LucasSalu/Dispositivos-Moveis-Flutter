@@ -10,10 +10,10 @@ class ServiceStock {
   static List<Stock> getAll() {
     var total = <Stock>[];
     total.add(Stock("Bitcoin", DateTime.now(), 200.0, "BTC"));
-    //total.add(Stock("Ethereum", DateTime.now(),200.0,"ETH"));
-    // total.add(Stock("Ethereum", DateTime.now(),200.0,"Ethereum"));
-    // total.add(Stock("Bitcoin", DateTime.now(),200.0,"BTC"));
-    // total.add(Stock("USD", DateTime.now(),200.0,"USD"));
+    total.add(Stock("Ethereum", DateTime.now(),200.0,"ETH"));
+    total.add(Stock("Cardano", DateTime.now(),200.0,"ADA"));
+    total.add(Stock("Litecoin", DateTime.now(),200.0,"LTC"));
+    total.add(Stock("Ripple", DateTime.now(),200.0,"XRP"));
     // total.add(Stock("USDT", DateTime.now(),200.0,"USDT"));
     // total.add(Stock("Ethereum", DateTime.now(),200.0,"Ethereum"));
     // total.add(Stock("Bitcoin", DateTime.now(),200.0,"BTC"));
