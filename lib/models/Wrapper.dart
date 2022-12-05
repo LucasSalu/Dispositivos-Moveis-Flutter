@@ -1,6 +1,7 @@
 import 'package:atividade_2/bloc/auth/auth_bloc.dart';
 import 'package:atividade_2/bloc/auth/auth_event.dart';
 import 'package:atividade_2/bloc/auth/auth_state.dart';
+import 'package:atividade_2/bloc/stock/user_stock_bloc.dart';
 import 'package:atividade_2/bloc/view/view_bloc.dart';
 import 'package:atividade_2/bloc/view/view_events.dart';
 import 'package:atividade_2/models/Chart.dart';
@@ -34,6 +35,7 @@ class WrapperState extends State<Wrapper> {
 
   @override
   Widget build(BuildContext context) {
+    UserLoginBloc userLoginBloc = BlocProvider.of<UserLoginBloc>(context);
     AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
     ViewBloc viewBloc = BlocProvider.of<ViewBloc>(context);
 

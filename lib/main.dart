@@ -1,5 +1,6 @@
 import 'package:atividade_2/bloc/stock/stock_state.dart';
 import 'package:atividade_2/bloc/stock/user_stock_bloc.dart';
+import 'package:atividade_2/bloc/stock/user_stock_event.dart';
 import 'package:atividade_2/bloc/stock/user_stock_state.dart';
 import 'package:atividade_2/models/Wrapper.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class MyStatelessWidget extends StatelessWidget {
       BlocProvider(create: (context) => AuthBloc(AuthState())),
       BlocProvider(create: (context) => ViewBloc(ViewState())),
       BlocProvider(create: (context) => StockBloc(StockState())),
-      BlocProvider(create: (context) => UserStockBloc(UserStockState())),
+      BlocProvider(create: (context) => UserLoginBloc(UserLoginState())),
     ], child: const Wrapper());
   }
 }

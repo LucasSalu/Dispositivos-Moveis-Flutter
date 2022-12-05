@@ -1,5 +1,6 @@
 import 'package:atividade_2/bloc/auth/auth_bloc.dart';
 import 'package:atividade_2/bloc/auth/auth_event.dart';
+import 'package:atividade_2/bloc/stock/user_stock_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,6 +21,7 @@ class ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
+    UserLoginBloc userLoginBloc = BlocProvider.of<UserLoginBloc>(context);
 
     return Scaffold(
       backgroundColor: Colors.grey[300],
@@ -74,16 +76,12 @@ class ProfilePageState extends State<ProfilePage> {
                                   ListTile(
                                     leading: const Icon(Icons.email),
                                     title: const Text("Email:"),
-                                    subtitle: Text(completeForm
-                                        .textFields["email"]
-                                        .toString()),
+                                    subtitle: Text(userLoginBloc.state.email),
                                   ),
                                   ListTile(
                                     leading: const Icon(Icons.person),
                                     title: const Text("Nome Completo:"),
-                                    subtitle: Text(completeForm
-                                        .textFields["name"]
-                                        .toString()),
+                                    subtitle: Text(userLoginBloc.state.name,
                                   ),
                                 ],
                               ),

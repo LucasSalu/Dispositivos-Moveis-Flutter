@@ -1,7 +1,8 @@
 import 'package:atividade_2/utils/stock.dart';
 
-class UserStockState {
-  Stock? stock;
+class UserLoginState {
+  String name;
+  String email;
 
-  UserStockState({this.stock = null});
+  UserLoginState({this.name = "", this.email = ""});
 }

@@ -1,9 +1,10 @@
 import 'package:atividade_2/utils/stock.dart';
 
-abstract class UserStockEvent {}
+abstract class UserLoginEvent {}
 
-class UserChangeChart extends UserStockEvent {
-  final Stock changeChart;
+class UserLogin extends UserLoginEvent {
+  final String name;
+  final String email;
 
-  UserChangeChart({required this.changeChart});
+  UserLogin({required this.name, required this.email});
 }
