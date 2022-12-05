@@ -14,12 +14,19 @@ class ServiceStock {
     total.add(Stock("Cardano", DateTime.now(),200.0,"ADA"));
     total.add(Stock("Litecoin", DateTime.now(),200.0,"LTC"));
     total.add(Stock("Ripple", DateTime.now(),200.0,"XRP"));
-    // total.add(Stock("USDT", DateTime.now(),200.0,"USDT"));
-    // total.add(Stock("Ethereum", DateTime.now(),200.0,"Ethereum"));
-    // total.add(Stock("Bitcoin", DateTime.now(),200.0,"BTC"));
-    // total.add(Stock("USD", DateTime.now(),200.0,"USD"));
-    // total.add(Stock("USDT", DateTime.now(),200.0,"USDT"));
-    // total.add(Stock("Ethereum", DateTime.now(),200.0,"Ethereum"));
+    total.add(Stock("Dogecoin", DateTime.now(),200.0,"DOGE"));
+    total.add(Stock("Ethereum", DateTime.now(),200.0,"Ethereum"));
+    total.add(Stock("Polygon", DateTime.now(),200.0,"MATIC"));
+    total.add(Stock("Polkadot", DateTime.now(),200.0,"DOT"));
+    total.add(Stock("Dai", DateTime.now(),200.0,"DAI"));
+    total.add(Stock("Shiba Inu", DateTime.now(),200.0,"SHIB"));
+    total.add(Stock("Solana", DateTime.now(),200.0,"SOL"));
+    total.add(Stock("Uniswap", DateTime.now(),200.0," UNI"));
+    total.add(Stock("Avalanche", DateTime.now(),200.0,"AVAX"));
+    total.add(Stock("Chainlink", DateTime.now(),200.0,"LINK"));
+    total.add(Stock("Cosmos", DateTime.now(),200.0,"ATOM"));
+    total.add(Stock("Monero", DateTime.now(),200.0,"XMR"));
+    total.add(Stock("Bitcoin Cash", DateTime.now(),200.0,"BCH"));
     return total;
   }
 
