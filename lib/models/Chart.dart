@@ -66,8 +66,6 @@ class ChartState extends State<Chart> {
   }
 }
 
-
-
 Widget sample3(BuildContext context) {
   final fromDate = DateTime(2019, 05, 22);
   final toDate = DateTime.now();
@@ -76,40 +74,57 @@ Widget sample3(BuildContext context) {
   final date2 = DateTime.now().subtract(Duration(days: 15));
   ServiceStock serviceStock = ServiceStock();
   StockBloc stockBloc = BlocProvider.of<StockBloc>(context);
-  Stock? stock = stockBloc.state.stock == null? stockBloc.state.stock :Stock("Bitcoin", DateTime.now(), 200.0, "BTC");
-  List<DataPoint<DateTime>> listPoints = serviceStock.dataPoints(stock!);
+  Stock? stock = stockBloc.state.stock == null
+      ? stockBloc.state.stock
+      : Stock("Bitcoin", DateTime.now(), 200.0, "BTC");
+  Future<List<DataPoint<DateTime>>> listPoints =
+      serviceStock.dataPoints(stock!);
+  delay() {
+    return Future.delayed(const Duration(seconds: 1), () => "1");
+  }
 
-  return Center(
-    child: Container(
-      color: Colors.red,
-      height: MediaQuery.of(context).size.height / 2,
-      width: MediaQuery.of(context).size.width,
-      child: BezierChart(
-        fromDate: fromDate,
-        bezierChartScale: BezierChartScale.WEEKLY,
-        toDate: toDate,
-        selectedDate: toDate,
-        series: [
-          BezierLine(
-            label: "Duty",
-            onMissingValue: (dateTime) {
-              if (dateTime.day.isEven) {
-                return 10.0;
-              }
-              return 5.0;
-            },
-            data: listPoints,
+  return FutureBuilder(
+    future: listPoints,
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.done) {
+        return Center(
+          child: Container(
+            color: Colors.red,
+            height: MediaQuery.of(context).size.height / 2,
+            width: MediaQuery.of(context).size.width,
+            child: BezierChart(
+              fromDate: fromDate,
+              bezierChartScale: BezierChartScale.WEEKLY,
+              toDate: toDate,
+              selectedDate: toDate,
+              series: [
+                BezierLine(
+                  label: "Duty",
+                  onMissingValue: (dateTime) {
+                    if (dateTime.day.isEven) {
+                      return 10.0;
+                    }
+                    return 5.0;
+                  },
+                  data: snapshot.data as List<DataPoint<DateTime>>?,
+                ),
+              ],
+              config: BezierChartConfig(
+                verticalIndicatorStrokeWidth: 3.0,
+                verticalIndicatorColor: Colors.black26,
+                showVerticalIndicator: true,
+                verticalIndicatorFixedPosition: false,
+                backgroundColor: Colors.red,
+                footerHeight: 30.0,
+              ),
+            ),
           ),
-        ],
-        config: BezierChartConfig(
-          verticalIndicatorStrokeWidth: 3.0,
-          verticalIndicatorColor: Colors.black26,
-          showVerticalIndicator: true,
-          verticalIndicatorFixedPosition: false,
-          backgroundColor: Colors.red,
-          footerHeight: 30.0,
-        ),
-      ),
-    ),
+        );
+      } else {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+    },
   );
 }
