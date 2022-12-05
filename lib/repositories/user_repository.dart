@@ -1,3 +1,4 @@
+import 'package:atividade_2/bloc/auth/auth_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../database/db/db.dart';
@@ -27,6 +28,11 @@ class UserRepository {
     db = await DB.instance.database;
     List<Map<String, dynamic>> result = await db.query('user');
     return result;
+  }
+
+  insertUser(Map<String, dynamic> user) async {
+    db = await DB.instance.database;
+    await db.insert('user', user);
   }
 
   _getIds() async {
@@ -67,7 +73,7 @@ class UserRepository {
   List<String> get emails => _emails;
   List<String> get tokens => _tokens;
 
-  Future<void> insertUser(
+  Future<void> insertUsers(
       String name, String email, String password, String token) async {
     db = await DB.instance.database;
     await db.insert('user', {
@@ -88,6 +94,8 @@ class UserRepository {
         columns: ['token'],
         where: 'email = ? AND password = ?',
         whereArgs: [email, password]);
+
+    print("result: ${result[0]['token']}");
     return result.first['token'];
   }
 

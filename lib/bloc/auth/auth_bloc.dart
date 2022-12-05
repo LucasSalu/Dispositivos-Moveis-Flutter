@@ -12,14 +12,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoadUser>((event, emit) {
       emit(AuthState(token: authenticate(event.token)));
     });
-    on<LoginUser>((event, emit) {
-      AuthClass authenticationState = loginUser(event.email, event.password);
+    on<LoginUser>((event, emit) async {
+      AuthClass authenticationState =
+          await loginUser(event.email, event.password);
       emit(AuthState(
           token: authenticationState.token,
           isAuthenticated: authenticationState.isAuthenticated));
     });
-    on<RegisterUser>((event, emit) {
-      AuthClass authenticationState = registerUser(
+    on<RegisterUser>((event, emit) async {
+      AuthClass authenticationState = await registerUser(
           event.email, event.password, event.name, event.hasAcceptedTerms);
       emit(AuthState(
           token: authenticationState.token,
@@ -65,27 +66,21 @@ String generateToken() {
   return getRandomString(15);
 }
 
-AuthClass loginUser(String email, String password) {
+Future<AuthClass> loginUser(String email, String password) async {
   UserRepository users = UserRepository();
-  String userToken = '';
-  var allUsers;
-  users.getAll().then((value) => allUsers = value);
-  List<String> usersList = users.emails;
-  List<String> tokensList = users.tokens;
-  users.getUserToken(email, password).then((value) => userToken = value);
+  String userToken = await users.getUserToken(email, password);
 
-  print('User token: $userToken');
-  print('User names: $usersList');
-  print('User tokens: $tokensList');
-  print('getAll ${allUsers}');
+  print(userToken);
 
   return AuthClass(userToken, userToken.isNotEmpty);
 }
 
-AuthClass registerUser(String email, String password, String name, bool terms) {
+Future<AuthClass> registerUser(
+    String email, String password, String name, bool terms) async {
   UserRepository users = UserRepository();
   String token = generateToken();
-  users.insertUser(name, email, password, token);
+  await users.insertUsers(name, email, password, token);
+
   return AuthClass(token, true);
 }
 
