@@ -9,13 +9,15 @@ import 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(AuthState initialState) : super(initialState) {
-    on<LoadUser>((event, emit) {
-      emit(AuthState(token: authenticate(event.token)));
+    on<LoadUser>((event, emit) async {
+      emit(AuthState(token: await authenticate(event.token)));
     });
     on<LoginUser>((event, emit) async {
       AuthClass authenticationState =
           await loginUser(event.email, event.password);
       emit(AuthState(
+          email: event.email,
+          name: authenticationState.name,
           token: authenticationState.token,
           isAuthenticated: authenticationState.isAuthenticated));
     });
@@ -23,6 +25,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthClass authenticationState = await registerUser(
           event.email, event.password, event.name, event.hasAcceptedTerms);
       emit(AuthState(
+          email: event.email,
+          name: authenticationState.name,
           token: authenticationState.token,
           isAuthenticated: authenticationState.isAuthenticated));
     });
@@ -32,10 +36,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 }
 
-String authenticate(String token) {
+Future<String> authenticate(String token) async {
   UserRepository users = UserRepository();
-  String sessionToken = '';
-  users.validateToken(token).then((value) => sessionToken = value);
+  String sessionToken = await users.validateToken(token);
+
   return sessionToken;
 }
 
@@ -43,6 +47,7 @@ String clearToken(String token) {
   SessionDataRepository sessionDataRepository = SessionDataRepository();
   if (token.isNotEmpty && sessionDataRepository.currentToken.isNotEmpty) {
     sessionDataRepository.deleteCurrentToken();
+
     return sessionDataRepository.currentToken;
   } else {
     return '';
@@ -69,10 +74,9 @@ String generateToken() {
 Future<AuthClass> loginUser(String email, String password) async {
   UserRepository users = UserRepository();
   String userToken = await users.getUserToken(email, password);
+  String userName = await users.getUserNameByEmail(email);
 
-  print(userToken);
-
-  return AuthClass(userToken, userToken.isNotEmpty);
+  return AuthClass(userToken, userToken.isNotEmpty, userName);
 }
 
 Future<AuthClass> registerUser(
@@ -80,13 +84,15 @@ Future<AuthClass> registerUser(
   UserRepository users = UserRepository();
   String token = generateToken();
   await users.insertUsers(name, email, password, token);
+  String userName = await users.getUserNameByEmail(email);
 
-  return AuthClass(token, true);
+  return AuthClass(token, true, userName);
 }
 
 class AuthClass {
   String token = '';
   bool isAuthenticated = false;
+  String name = '';
 
-  AuthClass(this.token, this.isAuthenticated);
+  AuthClass(this.token, this.isAuthenticated, [this.name = '']);
 }

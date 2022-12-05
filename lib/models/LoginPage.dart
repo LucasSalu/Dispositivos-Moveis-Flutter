@@ -1,9 +1,12 @@
 import 'package:atividade_2/bloc/auth/auth_event.dart';
+import 'package:atividade_2/bloc/stock/user_stock_bloc.dart';
 import 'package:atividade_2/bloc/view/view_bloc.dart';
+import 'package:atividade_2/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/auth/auth_bloc.dart';
+import '../bloc/stock/user_stock_event.dart';
 import '../bloc/view/view_events.dart';
 
 class LoginPage extends StatefulWidget {
@@ -24,6 +27,7 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     ViewBloc viewBloc = BlocProvider.of<ViewBloc>(context);
     AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
+    UserLoginBloc userLoginBloc = BlocProvider.of<UserLoginBloc>(context);
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SingleChildScrollView(

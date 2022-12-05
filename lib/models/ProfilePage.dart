@@ -16,7 +16,6 @@ class ProfilePage extends StatefulWidget {
 class ProfilePageState extends State<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
   final myController = TextEditingController();
-  var completeForm = CompleteForm();
 
   @override
   Widget build(BuildContext context) {
@@ -76,13 +75,14 @@ class ProfilePageState extends State<ProfilePage> {
                                   ListTile(
                                     leading: const Icon(Icons.email),
                                     title: const Text("Email:"),
-                                    subtitle: Text(userLoginBloc.state.email),
+                                    subtitle: Text(authBloc.state.email),
                                   ),
                                   ListTile(
                                     leading: const Icon(Icons.person),
                                     title: const Text("Nome Completo:"),
-                                    subtitle: Text(userLoginBloc.state.name,
-                                  ),
+                                    subtitle: Text(
+                                      authBloc.state.name,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -124,11 +124,4 @@ class ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-}
-
-class CompleteForm {
-  Map textFields = {
-    "email": "jorgeOmar@shark.com.br",
-    "name": "Jorge Omar",
-  };
 }

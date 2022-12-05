@@ -1,4 +1,9 @@
 import 'package:atividade_2/bloc/auth/auth_bloc.dart';
+import 'package:atividade_2/bloc/stock/user_stock_bloc.dart';
+import 'package:atividade_2/bloc/stock/user_stock_event.dart';
+import 'package:atividade_2/repositories/session_data_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../database/db/db.dart';
@@ -6,11 +11,11 @@ import '../database/db/db.dart';
 class UserRepository {
   late Database db;
 
-  List<String> _ids = [];
-  List<String> _names = [];
-  List<String> _emails = [];
-  List<String> _passwords = [];
-  List<String> _tokens = [];
+  List<Map<String, dynamic>> _ids = [];
+  List<Map<String, dynamic>> _names = [];
+  List<Map<String, dynamic>> _emails = [];
+  List<Map<String, dynamic>> _passwords = [];
+  List<Map<String, dynamic>> _tokens = [];
 
   UserRepository() {
     _initRepository();
@@ -38,40 +43,40 @@ class UserRepository {
   _getIds() async {
     db = await DB.instance.database;
     List<Map<String, dynamic>> result = await db.query('user', columns: ['id']);
-    _ids = result.map((e) => e['id'].toString()).toList();
+    _ids = result;
   }
 
   _getNames() async {
     db = await DB.instance.database;
     List<Map<String, dynamic>> result =
         await db.query('user', columns: ['name']);
-    _names = result.map((e) => e['name'].toString()).toList();
+    _names = result;
   }
 
   _getEmails() async {
     db = await DB.instance.database;
     List<Map<String, dynamic>> result =
         await db.query('user', columns: ['email']);
-    _emails = result.map((e) => e['email'].toString()).toList();
+    _emails = result;
   }
 
   _getPasswords() async {
     db = await DB.instance.database;
     List<Map<String, dynamic>> result =
         await db.query('user', columns: ['password']);
-    _passwords = result.map((e) => e['password'].toString()).toList();
+    _passwords = result;
   }
 
   _getTokens() async {
     db = await DB.instance.database;
     List<Map<String, dynamic>> result =
         await db.query('user', columns: ['token']);
-    _tokens = result.map((e) => e['token'].toString()).toList();
+    _tokens = result;
   }
 
-  List<String> get names => _names;
-  List<String> get emails => _emails;
-  List<String> get tokens => _tokens;
+  List<Map<String, dynamic>> get names => _names;
+  List<Map<String, dynamic>> get emails => _emails;
+  List<Map<String, dynamic>> get tokens => _tokens;
 
   Future<void> insertUsers(
       String name, String email, String password, String token) async {
@@ -95,8 +100,23 @@ class UserRepository {
         where: 'email = ? AND password = ?',
         whereArgs: [email, password]);
 
-    print("result: ${result[0]['token']}");
-    return result.first['token'];
+    if (result.isNotEmpty) {
+      return result.first['token'];
+    } else {
+      return '';
+    }
+  }
+
+  getUserNameByEmail(String email) async {
+    db = await DB.instance.database;
+    List<Map<String, dynamic>> result = await db.query('user',
+        columns: ['name'], where: 'email = ?', whereArgs: [email]);
+
+    if (result.isNotEmpty) {
+      return result.first['name'];
+    } else {
+      return '';
+    }
   }
 
   Future<String> validateToken(String token) async {
