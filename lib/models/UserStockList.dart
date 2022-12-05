@@ -1,30 +1,30 @@
-import 'package:atividade_2/models/UserStockList.dart';
-import 'package:atividade_2/services/ServiceStock.dart';
 import 'package:atividade_2/bloc/stock/stock_bloc.dart';
 import 'package:atividade_2/bloc/stock/stock_event.dart';
+import 'package:atividade_2/utils/stock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class StockList extends StatefulWidget {
-  const StockList({Key? key}) : super(key: key);
+import '../services/ServiceUserStock.dart';
+
+class UserStockList extends StatefulWidget {
+  const UserStockList({Key? key}) : super(key: key);
 
   @override
-  StockListState createState() {
-    return StockListState();
+  UserStockListState createState() {
+    return UserStockListState();
   }
 }
 
-class StockListState extends State<StockList> {
+class UserStockListState extends State<UserStockList> {
   final List<String> entries = <String>['A', 'B', 'C'];
   final List<int> colorCodes = <int>[600, 500, 100];
-  List lista = ServiceStock.getAll();
-  ServiceStock serviceStock = ServiceStock();
 
-  @override
+  ServiceUserStock serviceUserStock = ServiceUserStock();
+  List<Stock> lista = ServiceUserStock.getAll();
+
   @override
   Widget build(BuildContext context) {
     StockBloc stockBloc = BlocProvider.of<StockBloc>(context);
-    UserStockList stockList = UserStockList();
     return ListView.builder(
         itemCount: lista.length,
         itemBuilder: (BuildContext context, int index) {
@@ -43,7 +43,7 @@ class StockListState extends State<StockList> {
                 itemBuilder: (BuildContext context) {
                   return [
                     PopupMenuItem(
-                      child: const Text("Vizualizar"),
+                      child: const Text("remover"),
                       value: 1,
                       onTap: () {
                         stockBloc.add(ChangeChart(changeChart: lista[index]));
@@ -54,42 +54,11 @@ class StockListState extends State<StockList> {
                       },
                     ),
                     PopupMenuItem(
-                      child: ElevatedButton(
-                        child: const Text('Adicionar'),
-                        onPressed: () {
-                          showModalBottomSheet<void>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Container(
-                                height: 200,
-                                color: Colors.blue.shade200,
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      ElevatedButton(
-                                        child: Text("${lista[index].name.toString()} : ${lista[index].price.toString()}"),
-                                        onPressed: () => Navigator.pop(context),
-                                      ),
-                                      Padding(padding: EdgeInsets.all(10)),
-                                      ElevatedButton(
-                                        child: Text(' + 1 '),
-                                        onPressed: () => {
-                                          lista[index].price += 1
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
+                      child: const Text("Mostrar Grafico"),
                       value: 2,
                       onTap: () {
                         stockBloc.add(ChangeChart(changeChart: lista[index]));
+                        serviceUserStock.addStock(lista[index]);
                         DefaultTabController.of(this.context)!.animateTo(2);
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             content: Text(
@@ -99,7 +68,8 @@ class StockListState extends State<StockList> {
                   ];
                 },
               ),
-              onPressed: () {},
+              onPressed: () {
+              },
             ),
           );
         });

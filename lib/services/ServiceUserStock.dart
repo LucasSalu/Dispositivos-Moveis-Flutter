@@ -4,14 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:atividade_2/utils/stock.dart';
 import 'package:dio/dio.dart';
 
-class ServiceStock {
+class ServiceUserStock {
   final dio = Dio();
 
   static List<Stock> getAll() {
     var total = <Stock>[];
     total.add(Stock("Bitcoin", DateTime.now(), 200.0, "BTC"));
     //total.add(Stock("Ethereum", DateTime.now(),200.0,"ETH"));
-    // total.add(Stock("Ethereum", DateTime.now(),200.0,"Ethereum"));
     // total.add(Stock("Bitcoin", DateTime.now(),200.0,"BTC"));
     // total.add(Stock("USD", DateTime.now(),200.0,"USD"));
     // total.add(Stock("USDT", DateTime.now(),200.0,"USDT"));
@@ -23,12 +22,16 @@ class ServiceStock {
     return total;
   }
 
-  getCripto(Stock stock) async {
+  getCripto() async {
     DateFormat format = new DateFormat("yyyy-MM-dd");
     List<Stock> historyChart = [];
-    for (var stock in getAll()) {
-      final response = await dio.get("https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol=${stock.simbol}&market=CNY&apikey=6V17MI1D59PR1S30");
-      final Map map = Map.from(response.data["Time Series (Digital Currency Daily)"]);
+    for (var i in getAll()) {
+      print(
+          "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol=${i.simbol}&market=CNY&apikey=6V17MI1D59PR1S30");
+      final response = await dio.get(
+          "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol=${i.simbol}&market=CNY&apikey=6V17MI1D59PR1S30");
+      final Map map =
+          Map.from(response.data["Time Series (Digital Currency Daily)"]);
 
       map.forEach((key, value) {
         final Map mapDate = Map.from(
@@ -37,17 +40,18 @@ class ServiceStock {
         mapDate.forEach((key1, value1) {
           if (verifica) {
             historyChart.add(Stock(
-                stock.name,
+                i.name,
                 format.parse(key),
                 double.parse(
                     response.data["Time Series (Digital Currency Daily)"][key]
                         ["4b. close (USD)"]),
-                stock.simbol));
+                i.simbol));
           }
           verifica = false;
         });
       });
     }
+    print(historyChart);
   }
 
   Future<List<Stock>> getHistory(Stock currencyStock) async {
@@ -88,5 +92,13 @@ class ServiceStock {
     }
 
     return list;
+  }
+
+  delete(Stock stock){
+
+  }
+
+  addStock(Stock Stock){
+
   }
 }

@@ -56,7 +56,7 @@ class ChartState extends State<Chart> {
         ),
         ElevatedButton(
           onPressed: () {
-            serviceStock.getCripto();
+            serviceStock.getCripto(stockBloc.state.stock!);
             print(stockBloc.state.stock);
           },
           child: const Text('Enabled'),
@@ -99,7 +99,8 @@ Widget sample3(BuildContext context) {
               selectedDate: toDate,
               series: [
                 BezierLine(
-                  label: "Duty",
+
+                  label: "${stock.name}",
                   onMissingValue: (dateTime) {
                     if (dateTime.day.isEven) {
                       return 10.0;
@@ -114,7 +115,7 @@ Widget sample3(BuildContext context) {
                 verticalIndicatorColor: Colors.black26,
                 showVerticalIndicator: true,
                 verticalIndicatorFixedPosition: false,
-                backgroundColor: Colors.red,
+                backgroundColor: Colors.blue.shade100,
                 footerHeight: 30.0,
               ),
             ),

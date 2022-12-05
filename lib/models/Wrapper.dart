@@ -7,8 +7,7 @@ import 'package:atividade_2/models/Chart.dart';
 import 'package:atividade_2/models/Forms.dart';
 import 'package:atividade_2/models/ProfilePage.dart';
 import 'package:atividade_2/models/StockList.dart';
-import 'package:atividade_2/repositories/session_data_repository.dart';
-import 'package:atividade_2/repositories/user_repository.dart';
+import 'package:atividade_2/models/UserStockList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_conditional_rendering/flutter_conditional_rendering.dart';
@@ -30,6 +29,7 @@ class WrapperState extends State<Wrapper> {
             )),
     const Tab(icon: Icon(Icons.list_alt_rounded)),
     const Tab(icon: Icon(Icons.graphic_eq)),
+    const Tab(icon: Icon(Icons.people)),
   ];
 
   @override
@@ -38,7 +38,7 @@ class WrapperState extends State<Wrapper> {
     ViewBloc viewBloc = BlocProvider.of<ViewBloc>(context);
 
     //TODO: Remenber to insert a field named 'currentSessionToken' at the SQFLite database.
-    //authBloc.add(LoadUser(token: getLoggedUserAuthToken()));
+    authBloc.add(LoadUser(token: getLoggedUserAuthToken()));
 
     return BlocBuilder<AuthBloc, AuthState>(
       builder: ((context, state) => DefaultTabController(
@@ -62,7 +62,7 @@ class WrapperState extends State<Wrapper> {
                   backgroundColor: Colors.black,
                 ),
                 body: const TabBarView(
-                  children: <Widget>[ProfilePage(), StockList(), Chart()],
+                  children: <Widget>[ProfilePage(), StockList(), Chart(), UserStockList()],
                 ),
               ),
               fallbackBuilder: (context) => Scaffold(
@@ -80,9 +80,6 @@ class WrapperState extends State<Wrapper> {
 
 //TODO: Implement a query to get the logged user token
 String getLoggedUserAuthToken() {
-  SessionDataRepository sessionData = SessionDataRepository();
-  String token = '';
-  sessionData.getCurrentToken().then((value) => token = value);
-
-  return token;
+  //return 'Not Authenticated';
+  return 'TOKEN';
 }
